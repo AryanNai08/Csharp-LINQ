@@ -26,11 +26,19 @@ namespace LinqExamples
             //var b=from i in age where i>20 orderby i descending select i;  //desc order
             var b = from i in age where i > 20 orderby i  select i;
 
-            foreach (var i in a)
+            foreach (var i in b)
             {
                 Console.WriteLine(i);
             }
-            Console.WriteLine("**************");
+            Console.WriteLine("desc order");
+
+            var c=from i in age where i>20 orderby i descending select i;  //desc order
+           
+
+            foreach (var i in c)
+            {
+                Console.WriteLine(i);
+            }
         }
     }
 }
