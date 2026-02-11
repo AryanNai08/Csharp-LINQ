@@ -9,7 +9,7 @@ namespace LinqQueryandSyntax
         {
             //BasicQuery.Run();
             //GroupbyAndOrderby.Run();
-            Aggregate.Run();
+            AggregateDemo.Run();
         }
     }
 }

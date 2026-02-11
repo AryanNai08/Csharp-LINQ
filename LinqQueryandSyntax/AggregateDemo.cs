@@ -1,34 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-
-namespace LinqQueryandSyntax
+namespace LINQExample_Simple
 {
-    class Aggregate
+    public class AggregateDemo
     {
-       public static void Run()
+        public static void Run()
         {
             List<Employee> employeeList = Data.GetEmployees();
             List<Department> departmentList = Data.GetDepartments(employeeList);
 
-            // =====================================================
-            // 1. SEQUENCEEQUAL (Compare 2 lists)
-            // =====================================================
-            // METHOD BASED
-            var empList2 = Data.GetEmployees();
-            bool same = employeeList.SequenceEqual(empList2, new EmployeeComparer());
-            Console.WriteLine($"Both employee lists same? {same}");
+            // =========================================================
+            // 1. SEQUENCEEQUAL (Compare two lists)
+            // METHOD SYNTAX
+            // =========================================================
+            var list2 = Data.GetEmployees();
+
+            bool same = employeeList.SequenceEqual(list2, new EmployeeComparer());
+            Console.WriteLine($"Both lists same? {same}");
 
 
 
-            // =====================================================
+            // =========================================================
             // 2. CONCAT (Merge two lists)
-            // =====================================================
-            // METHOD BASED
+            // METHOD SYNTAX
+            // =========================================================
             List<Employee> newEmployees = new List<Employee>
             {
                 new Employee{Id=5, FirstName="Tony", LastName="Stark"},
@@ -36,16 +33,17 @@ namespace LinqQueryandSyntax
             };
 
             var concatResult = employeeList.Concat(newEmployees);
+
             Console.WriteLine("\nConcat Result:");
             foreach (var e in concatResult)
                 Console.WriteLine($"{e.Id} {e.FirstName}");
 
 
 
-            // =====================================================
-            // 3. COUNT, SUM, AVERAGE, MAX (Aggregate operators)
-            // =====================================================
-            // METHOD BASED
+            // =========================================================
+            // 3. COUNT, SUM, AVERAGE, MAX
+            // METHOD SYNTAX
+            // =========================================================
             int count = employeeList.Count();
             decimal totalSalary = employeeList.Sum(e => e.AnnualSalary);
             decimal avgSalary = employeeList.Average(e => e.AnnualSalary);
@@ -58,12 +56,12 @@ namespace LinqQueryandSyntax
 
 
 
-            // =====================================================
-            // 4. DISTINCT (remove duplicates)
-            // =====================================================
+            // =========================================================
+            // 4. DISTINCT (Remove duplicates)
+            // METHOD SYNTAX
+            // =========================================================
             List<int> numbers = new List<int> { 1, 2, 2, 3, 4, 4, 5 };
 
-            // METHOD BASED
             var distinct = numbers.Distinct();
             Console.WriteLine("\nDistinct numbers:");
             foreach (var n in distinct)
@@ -71,10 +69,10 @@ namespace LinqQueryandSyntax
 
 
 
-            // =====================================================
+            // =========================================================
             // 5. TAKE & SKIP (Paging concept)
-            // =====================================================
-            // METHOD BASED
+            // METHOD SYNTAX
+            // =========================================================
             var firstTwo = employeeList.Take(2);
             Console.WriteLine("\nTake first 2:");
             foreach (var e in firstTwo)
@@ -87,10 +85,10 @@ namespace LinqQueryandSyntax
 
 
 
-            // =====================================================
-            // 6. CONVERSION OPERATORS
-            // =====================================================
-            // QUERY BASED -> ToList()
+            // =========================================================
+            // 6. CONVERSION OPERATOR (ToList)
+            // QUERY SYNTAX
+            // =========================================================
             var highSalary = (from e in employeeList
                               where e.AnnualSalary > 50000
                               select e).ToList();
@@ -101,18 +99,19 @@ namespace LinqQueryandSyntax
 
 
 
-            // =====================================================
+            // =========================================================
             // 7. SELECT vs SELECTMANY
-            // =====================================================
+            // METHOD SYNTAX
+            // =========================================================
 
-            // METHOD: Select (returns collection inside collection)
+            // Select → returns collection inside collection
             var selectDept = departmentList.Select(d => d.Employees);
             Console.WriteLine("\nSelect result:");
             foreach (var dept in selectDept)
                 foreach (var emp in dept)
                     Console.WriteLine(emp.FirstName);
 
-            // METHOD: SelectMany (flat result)
+            // SelectMany → flatten result
             var selectManyDept = departmentList.SelectMany(d => d.Employees);
             Console.WriteLine("\nSelectMany result:");
             foreach (var emp in selectManyDept)
@@ -120,9 +119,10 @@ namespace LinqQueryandSyntax
 
 
 
-            // =====================================================
-            // 8. LET KEYWORD (Query syntax)
-            // =====================================================
+            // =========================================================
+            // 8. LET KEYWORD
+            // QUERY SYNTAX
+            // =========================================================
             var letQuery = from emp in employeeList
                            let bonus = emp.IsManager ? emp.AnnualSalary * 0.04m : emp.AnnualSalary * 0.02m
                            let total = emp.AnnualSalary + bonus
@@ -136,18 +136,20 @@ namespace LinqQueryandSyntax
             Console.WriteLine("\nLET keyword result:");
             foreach (var item in letQuery)
                 Console.WriteLine($"{item.FirstName} {item.TotalSalary}");
-
-            Console.ReadKey();
         }
     }
 
-    // =====================================================
-    // EMPLOYEE COMPARER (used in SequenceEqual, Union etc)
-    // =====================================================
+
+
+    // =========================================================
+    // EMPLOYEE COMPARER (used in SequenceEqual)
+    // =========================================================
     public class EmployeeComparer : IEqualityComparer<Employee>
     {
         public bool Equals(Employee x, Employee y)
         {
+            if (x == null || y == null) return false;
+
             return x.Id == y.Id &&
                    x.FirstName.ToLower() == y.FirstName.ToLower() &&
                    x.LastName.ToLower() == y.LastName.ToLower();
@@ -159,9 +161,11 @@ namespace LinqQueryandSyntax
         }
     }
 
-    // =====================================================
+
+
+    // =========================================================
     // MODELS
-    // =====================================================
+    // =========================================================
     public class Employee
     {
         public int Id { get; set; }
@@ -180,9 +184,11 @@ namespace LinqQueryandSyntax
         public IEnumerable<Employee> Employees { get; set; }
     }
 
-    // =====================================================
+
+
+    // =========================================================
     // DATA SOURCE
-    // =====================================================
+    // =========================================================
     public static class Data
     {
         public static List<Employee> GetEmployees()
