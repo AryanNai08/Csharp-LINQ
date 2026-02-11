@@ -158,4 +158,7 @@ class Program
             
         }
     }
+
+
+    //implemented crud operations using entity framework code first approach in console application
 }
