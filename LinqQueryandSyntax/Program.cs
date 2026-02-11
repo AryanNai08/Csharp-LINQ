@@ -1,5 +1,4 @@
 ﻿
-using LINQExample_Simple;
 
 namespace LinqQueryandSyntax
 {

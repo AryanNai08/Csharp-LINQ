@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LINQExample_Simple
+namespace LinqQueryandSyntax
 {
     public class GroupbyAndOrderby
     {
@@ -140,49 +140,5 @@ namespace LINQExample_Simple
             foreach (var i in onlyInts)
                 Console.WriteLine(i);
         }
-    }
-
-
-
-    // =========================================================
-    // DATA SOURCE CLASS
-    // =========================================================
-    public static class Data
-    {
-        public static List<Employee> GetEmployees()
-        {
-            return new List<Employee>
-            {
-                new Employee{ Id=1, FirstName="Bob", LastName="Jones", AnnualSalary=60000, IsManager=true, DepartmentId=1},
-                new Employee{ Id=2, FirstName="Sarah", LastName="Jameson", AnnualSalary=80000, IsManager=true, DepartmentId=3},
-                new Employee{ Id=3, FirstName="Douglas", LastName="Roberts", AnnualSalary=40000, IsManager=false, DepartmentId=2},
-                new Employee{ Id=4, FirstName="Jane", LastName="Stevens", AnnualSalary=30000, IsManager=false, DepartmentId=3}
-            };
-        }
-
-        public static ArrayList GetHeterogeneousDataCollection()
-        {
-            ArrayList arr = new ArrayList();
-            arr.Add(100);
-            arr.Add("Hello");
-            arr.Add(200);
-            arr.Add(new Employee { Id = 10, FirstName = "Test", LastName = "User", AnnualSalary = 50000, DepartmentId = 1 });
-            return arr;
-        }
-    }
-
-
-
-    // =========================================================
-    // EMPLOYEE CLASS (MODEL)
-    // =========================================================
-    public class Employee
-    {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public decimal AnnualSalary { get; set; }
-        public bool IsManager { get; set; }
-        public int DepartmentId { get; set; }
     }
 }

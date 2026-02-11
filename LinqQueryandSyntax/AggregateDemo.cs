@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LINQExample_Simple
+namespace LinqQueryandSyntax
 {
     public class AggregateDemo
     {
@@ -108,11 +108,12 @@ namespace LINQExample_Simple
             var selectDept = departmentList.Select(d => d.Employees);
             Console.WriteLine("\nSelect result:");
             foreach (var dept in selectDept)
-                foreach (var emp in dept)
-                    Console.WriteLine(emp.FirstName);
+                if (dept != null)
+                    foreach (var emp in dept)
+                        Console.WriteLine(emp.FirstName);
 
             // SelectMany → flatten result
-            var selectManyDept = departmentList.SelectMany(d => d.Employees);
+            var selectManyDept = departmentList.SelectMany(d => d.Employees ?? Enumerable.Empty<Employee>());
             Console.WriteLine("\nSelectMany result:");
             foreach (var emp in selectManyDept)
                 Console.WriteLine(emp.FirstName);
@@ -136,92 +137,6 @@ namespace LINQExample_Simple
             Console.WriteLine("\nLET keyword result:");
             foreach (var item in letQuery)
                 Console.WriteLine($"{item.FirstName} {item.TotalSalary}");
-        }
-    }
-
-
-
-    // =========================================================
-    // EMPLOYEE COMPARER (used in SequenceEqual)
-    // =========================================================
-    public class EmployeeComparer : IEqualityComparer<Employee>
-    {
-        public bool Equals(Employee x, Employee y)
-        {
-            if (x == null || y == null) return false;
-
-            return x.Id == y.Id &&
-                   x.FirstName.ToLower() == y.FirstName.ToLower() &&
-                   x.LastName.ToLower() == y.LastName.ToLower();
-        }
-
-        public int GetHashCode(Employee obj)
-        {
-            return obj.Id.GetHashCode();
-        }
-    }
-
-
-
-    // =========================================================
-    // MODELS
-    // =========================================================
-    public class Employee
-    {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public decimal AnnualSalary { get; set; }
-        public bool IsManager { get; set; }
-        public int DepartmentId { get; set; }
-    }
-
-    public class Department
-    {
-        public int Id { get; set; }
-        public string ShortName { get; set; }
-        public string LongName { get; set; }
-        public IEnumerable<Employee> Employees { get; set; }
-    }
-
-
-
-    // =========================================================
-    // DATA SOURCE
-    // =========================================================
-    public static class Data
-    {
-        public static List<Employee> GetEmployees()
-        {
-            return new List<Employee>
-            {
-                new Employee{Id=1,FirstName="Bob",LastName="Jones",AnnualSalary=60000,IsManager=true,DepartmentId=2},
-                new Employee{Id=2,FirstName="Sarah",LastName="Jameson",AnnualSalary=80000,IsManager=true,DepartmentId=3},
-                new Employee{Id=3,FirstName="Douglas",LastName="Roberts",AnnualSalary=40000,IsManager=false,DepartmentId=1},
-                new Employee{Id=4,FirstName="Jane",LastName="Stevens",AnnualSalary=30000,IsManager=false,DepartmentId=3}
-            };
-        }
-
-        public static List<Department> GetDepartments(IEnumerable<Employee> employees)
-        {
-            return new List<Department>
-            {
-                new Department
-                {
-                    Id=1,ShortName="HR",LongName="Human Resources",
-                    Employees = employees.Where(e=>e.DepartmentId==1)
-                },
-                new Department
-                {
-                    Id=2,ShortName="FN",LongName="Finance",
-                    Employees = employees.Where(e=>e.DepartmentId==2)
-                },
-                new Department
-                {
-                    Id=3,ShortName="TE",LongName="Technology",
-                    Employees = employees.Where(e=>e.DepartmentId==3)
-                }
-            };
         }
     }
 }
